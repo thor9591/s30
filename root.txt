@@ -1,0 +1,139 @@
+//s30
+#include <stdio.h>
+#include <stdlib.h>
+typedef struct node
+{
+int info;
+struct node *next;
+} NODE;
+void createlist(NODE *head)
+{
+int n, i;
+NODE *last, *newnode;
+printf("Enter how many nodes you want to create:");
+scanf("%d", &n);
+last = head;
+for (i = 0; i < n; i++)
+{
+newnode = (NODE *)malloc(sizeof(NODE));
+newnode->next = NULL;
+printf("\nEnter the info:");
+scanf("%d", &newnode->info);
+last->next = newnode;
+last = newnode;
+}
+}
+void display(NODE *head)
+{
+NODE *temp;
+for (temp = head->next; temp != NULL; temp = temp->next)
+printf("%d\t", temp->info);
+}
+void sortlist(NODE *head)
+{
+NODE *temp, *temp1;
+int num;
+for (temp = head->next; temp->next != NULL; temp = temp->next)
+for (temp1 = temp->next; temp1 != NULL; temp1 = temp1->next)
+if (temp->info > temp1->info)
+{
+num = temp->info;
+temp->info = temp1->info;
+temp1->info = num;
+}
+}
+void merge(NODE *head,NODE *head1,NODE *head2)
+{
+NODE *t1=head->next, *t2=head1->next, *last=head2, *newnode;
+while(t1!=NULL && t2!=NULL)
+{
+newnode = (NODE *)malloc(sizeof(NODE));
+newnode->next = NULL;
+if(t1->info < t2->info)
+{
+newnode->info=t1->info;
+t1=t1->next;
+}
+else
+{
+newnode->info=t2->info;
+t2=t2->next;
+}
+//attach newnode
+last->next=newnode;
+last=newnode;
+}
+while(t1!=NULL) //first list has not ended
+{
+newnode = (NODE *)malloc(sizeof(NODE));
+newnode->info=t1->info;
+newnode->next = NULL;
+t1=t1->next;
+last->next=newnode;
+last=newnode;
+}
+while(t2!=NULL) //second list has not ended
+{
+newnode = (NODE *)malloc(sizeof(NODE));
+newnode->info=t2->info;
+newnode->next = NULL;
+t2=t2->next;
+last->next=newnode;
+last=newnode;
+}
+}
+void main()
+{
+NODE *head, *head1, *head2;
+int choice, n, pos;
+head = (NODE *)malloc(sizeof(NODE));
+head->next = NULL;
+head1 = (NODE *)malloc(sizeof(NODE));
+head1->next = NULL;
+head2 = (NODE *)malloc(sizeof(NODE));
+head2->next = NULL;
+do
+{
+printf("\n1:CREATE:");
+printf("\n2:DISPLAY:");
+printf("\n3:MERGE");
+printf("\n4:EXIT");
+printf("\n\nEnter your choice:");
+scanf("%d", &choice);
+switch (choice)
+{
+case 1:
+createlist(head);
+break;
+case 2:
+display(head);
+break;
+case 3:
+createlist(head);sortlist(head);
+createlist(head1);sortlist(head1);
+merge(head, head1, head2);
+display(head2);
+break;
+}
+} while(choice!=4);
+}
+
+
+//cc filename.h
+//cc filename.c
+//  ./a.out
+
+//OUTPUT:
+//1:CREATE:
+//2:DISPLAY:
+//3:MERGE
+//4:EXIT
+//Enter your choice:3
+//Enter how many nodes you want to create:2
+//Enter the info:4
+//Enter the info:1
+//Enter how many nodes you want to create:3
+//Enter the info:7
+//Enter the info:2
+//Enter the info:9
+//1 2 4 7 9
